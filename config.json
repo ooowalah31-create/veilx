@@ -1,0 +1,19 @@
+{
+  "app": {
+    "name": "Veilx",
+    "tagline": "Share teks & kode, simpel.",
+    "version": "1.0.0",
+    "author": "Built by Claude"
+  },
+  "langs": [
+    { "id": "auto",   "label": "Auto Detect" },
+    { "id": "plain",  "label": "Plain Text" },
+    { "id": "js",     "label": "JavaScript" },
+    { "id": "html",   "label": "HTML" },
+    { "id": "css",    "label": "CSS" },
+    { "id": "python", "label": "Python" },
+    { "id": "json",   "label": "JSON" },
+    { "id": "php",    "label": "PHP" },
+    { "id": "sql",    "label": "SQL" }
+  ]
+}

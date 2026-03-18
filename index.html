@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veilx — Share teks & kode</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <header>
+    <a class="logo" href="?" onclick="event.preventDefault(); window.location.href=window.location.href.split('?')[0];">
+      <div class="logo-mark">V</div>
+      <div>
+        <div class="logo-name">Veilx</div>
+        <div class="logo-tag">by Claude</div>
+      </div>
+    </a>
+    <nav>
+      <button class="nav-btn" id="btn-new-top">+ New</button>
+      <button class="nav-btn" id="btn-open-top">🔍 Open</button>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- ══ CREATE VIEW ══ -->
+    <div class="view" id="view-create">
+      <div class="create-header">
+        <div class="create-title">Buat Paste Baru</div>
+        <div class="create-sub">Tulis atau paste teks/kode → otomatis generate link share</div>
+      </div>
+
+      <div class="form-row">
+        <input class="inp" id="inp-title" type="text" placeholder="Judul (opsional)" maxlength="80" />
+        <select class="inp" id="inp-lang">
+          <option value="auto">Auto Detect</option>
+        </select>
+      </div>
+
+      <div class="editor-box">
+        <div class="ln-col" id="create-line-nums">
+          <span>1</span>
+        </div>
+        <textarea id="inp-content" placeholder="Paste teks atau kode di sini...&#10;&#10;Ctrl+Enter untuk langsung buat paste" spellcheck="false"></textarea>
+      </div>
+
+      <div class="form-row" style="margin-bottom:8px;">
+        <input class="inp" id="inp-pw" type="password" placeholder="🔒 Password (opsional)" style="max-width:220px; flex:0 0 auto;" />
+        <span class="create-stats" id="create-stats">0 chars · 1 baris</span>
+      </div>
+
+      <div class="err" id="create-err"></div>
+
+      <button class="btn btn-primary" id="btn-create" style="width:100%; justify-content:center;">
+        Create &amp; Share →
+      </button>
+      <div style="font-size:10px; color:var(--muted); margin-top:8px; letter-spacing:0.5px;">
+        Setelah dibuat, URL di address bar langsung bisa disalin dan dishare
+      </div>
+    </div>
+
+    <!-- ══ PASTE VIEW ══ -->
+    <div class="view" id="view-paste">
+      <div class="paste-header">
+        <div class="paste-title-row">
+          <div>
+            <div class="paste-name" id="view-title">Untitled</div>
+            <div class="paste-meta" style="margin-top:6px;">
+              <span class="badge badge-lang" id="view-lang">PLAIN</span>
+              <span class="meta-item" id="view-lines">0 baris</span>
+              <span class="meta-item" id="view-chars">0 chars</span>
+              <span class="meta-item" id="view-date"></span>
+              <span class="badge badge-pw" id="view-pw-badge" style="display:none">🔒 Protected</span>
+            </div>
+          </div>
+          <div class="paste-actions">
+            <button class="btn btn-ghost btn-sm" id="btn-raw">RAW</button>
+            <button class="btn btn-ghost btn-sm" id="btn-copy">📋 Copy</button>
+            <button class="btn btn-ghost btn-sm" id="btn-download">⬇ Save</button>
+            <button class="btn btn-ghost btn-sm" id="btn-new-from-paste">+ New</button>
+          </div>
+        </div>
+        <div style="font-size:10px; color:var(--muted); letter-spacing:0.5px; margin-top:2px;">
+          🔗 Salin link: lihat address bar di atas ↑
+        </div>
+      </div>
+
+      <!-- Code view -->
+      <div id="code-wrap">
+        <div class="code-box">
+          <div class="view-ln-col" id="line-nums"></div>
+          <pre id="code-block"></pre>
+        </div>
+      </div>
+
+      <!-- Raw opens in new tab via ?id=ID&raw=1 -->
+      <div id="raw-wrap" style="display:none;"><pre id="raw-block"></pre></div>
+    </div>
+
+    <!-- ══ LOCK VIEW ══ -->
+    <div class="view" id="view-lock">
+      <div class="center-view">
+        <div class="center-icon">🔒</div>
+        <div class="center-title" id="lock-title">Paste Protected</div>
+        <div class="center-sub">Paste ini diproteksi password. Masukkan password untuk melihat isinya.</div>
+        <input class="inp" id="lock-pw-input" type="password" placeholder="Password..." style="max-width:300px; text-align:center;" />
+        <div class="err" id="lock-err"></div>
+        <div class="center-btns">
+          <button class="btn btn-grn" id="btn-unlock">🔓 Buka</button>
+          <button class="btn btn-ghost" id="btn-lock-back">← Kembali</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ OPEN VIEW ══ -->
+    <div class="view" id="view-open">
+      <div class="open-wrap">
+        <div class="open-title">Buka Paste</div>
+        <div class="open-sub">Tempel ID paste atau link lengkapnya, lalu tekan Enter atau klik Buka.</div>
+        <div class="form-row">
+          <input class="inp" id="open-input" type="text" placeholder="ID atau link paste..." />
+        </div>
+        <div class="center-btns" style="justify-content:flex-start; margin-top:0;">
+          <button class="btn btn-primary" id="btn-do-open">🔍 Buka</button>
+          <button class="btn btn-ghost" id="btn-open-back">← Kembali</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ NOT FOUND VIEW ══ -->
+    <div class="view" id="view-notfound">
+      <div class="center-view">
+        <div class="center-icon">🌫️</div>
+        <div class="center-title">Paste Tidak Ditemukan</div>
+        <div class="center-sub">ID ini tidak ada di perangkat ini. Paste mungkin dibuat di perangkat lain atau sudah dihapus.</div>
+        <div class="center-btns">
+          <button class="btn btn-primary" id="btn-notfound-back">+ Buat Paste Baru</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer>Veilx — Built by Claude · Data disimpan di browser ini</footer>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
